@@ -1,0 +1,26 @@
+{
+  "val": {
+    "overall/pearson": 0.7971194982528687,
+    "overall/spearman": 0.7587996683425932,
+    "overall/rmse": 1.0689038104645787,
+    "cpi/pearson": 0.7693226933479309,
+    "cpi/spearman": 0.7378262900567086,
+    "cpi/rmse": 1.0558164982305358,
+    "ppi/pearson": 0.8392480611801147,
+    "ppi/spearman": 0.8296582214779393,
+    "ppi/rmse": 1.1532304875782025
+  },
+  "test": {
+    "overall/pearson": 0.8103969097137451,
+    "overall/spearman": 0.7705236285732514,
+    "overall/rmse": 1.0697980883639906,
+    "cpi/pearson": 0.7713885307312012,
+    "cpi/spearman": 0.751139102413982,
+    "cpi/rmse": 1.0451115801437478,
+    "ppi/pearson": 0.8291098475456238,
+    "ppi/spearman": 0.7992532523874855,
+    "ppi/rmse": 1.2329267383631175
+  },
+  "best_iteration": 493,
+  "oversample_factor": 6
+}
