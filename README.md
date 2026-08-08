@@ -93,7 +93,7 @@ python scripts/train_boost_t5protchem_raw_uniqueonly_quadsplice.py
 python scripts/predict_hoshino_t5protchem_raw_uniqueonly_quadsplice.py
 python scripts/correlate_hoshino_t5protchem_raw_uniqueonly_quadsplice.py
 python scripts/plot_test_scatter.py                   # re-extracts test features and plots results/test_scatter.png
-python scripts/plot_hoshino_figures.py                 # plots the normalized neutralization-vs-predicted-pKd bar comparison
+python scripts/plot_hoshino_figures.py                 # plots results/neutralization_vs_predicted.png (Figure S24 vs. predicted pKd, side by side)
 ```
 
 Scripts reference absolute paths from the original project layout (T5ProtChem
