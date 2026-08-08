@@ -72,6 +72,8 @@ for the same pairs (`scripts/correlate_hoshino_t5protchem_raw_uniqueonly_quadspl
 
 ![Predicted pKd, same samples/order](results/predicted_pkd_barplot.png)
 
+![Reference pKd, same samples/order](results/reference_pkd_barplot.png)
+
 **Caveat**: a 10-seed robustness check (reshuffling the train/val/test
 partition 10 times and refitting) found this external correlation is **not
 stable** — across seeds the mean Pearson r was 0.18 (unbalanced) / -0.06

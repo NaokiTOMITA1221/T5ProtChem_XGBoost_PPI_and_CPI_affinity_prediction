@@ -1,5 +1,5 @@
 """
-Two figures, sharing the same x-axis (A{n}T{m} sample labels, in the same
+Three figures, sharing the same x-axis (A{n}T{m} sample labels, in the same
 order) so they can be visually compared side by side:
   1. A reproduction of Figure S24's top histogram (hemolysis neutralization
      ratio per A{n}T{m} sample, pixel-extracted from the source PDF earlier
@@ -10,6 +10,9 @@ order) so they can be visually compared side by side:
      for the SAME samples/order (the 15 with a matching neutralization
      value; 3 of the 18 Hoshino_polymer pairs have no Figure S24 value and
      are excluded here for a like-for-like x-axis).
+  3. A bar plot of the reference pKd column already present in the
+     Hoshino_polymer input CSV (a pKd value from another, external source
+     -- NOT this repo's model), same samples/order, for comparison.
 """
 import matplotlib
 matplotlib.use("Agg")
@@ -29,6 +32,7 @@ PRED_CSV = "/mnt/hdd/tomita/PPI_CPI_prediction/T5ProtChem_XGBoost_PPI_and_CPI_af
 PRED_COL = "predicted_pKd_T5ProtChem_raw_uniqueonly_quadsplice"
 OUT_BAR = "/mnt/hdd/tomita/PPI_CPI_prediction/T5ProtChem_XGBoost_PPI_and_CPI_affinity_prediction/results/figureS24_reproduction.png"
 OUT_PRED_BAR = "/mnt/hdd/tomita/PPI_CPI_prediction/T5ProtChem_XGBoost_PPI_and_CPI_affinity_prediction/results/predicted_pkd_barplot.png"
+OUT_REF_BAR = "/mnt/hdd/tomita/PPI_CPI_prediction/T5ProtChem_XGBoost_PPI_and_CPI_affinity_prediction/results/reference_pkd_barplot.png"
 
 # --- Figure 1: Figure S24 top histogram reproduction ---
 values = [NEUTRALIZATION[label] for label in LABEL_ORDER]
@@ -58,3 +62,16 @@ ax2.tick_params(axis="x", rotation=45)
 fig2.tight_layout()
 fig2.savefig(OUT_PRED_BAR, dpi=150)
 print(f"Saved {OUT_PRED_BAR}")
+
+# --- Figure 3: reference pKd bar plot, same x-axis/order ---
+ref_by_label = df.set_index("label")["pKd"]
+ref_values = [ref_by_label[label] for label in LABEL_ORDER]
+
+fig3, ax3 = plt.subplots(figsize=(9, 4.5))
+ax3.bar(LABEL_ORDER, ref_values, color=colors)
+ax3.set_ylabel("Reference pKd")
+ax3.set_title("Reference pKd (external source), same samples/order as Figure S24 above")
+ax3.tick_params(axis="x", rotation=45)
+fig3.tight_layout()
+fig3.savefig(OUT_REF_BAR, dpi=150)
+print(f"Saved {OUT_REF_BAR}")
