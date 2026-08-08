@@ -42,6 +42,20 @@ are included directly under `data/`:
 - `data/split_pure_random_uniqueonly_val.csv`
 - `data/split_pure_random_uniqueonly_test.csv`
 
+Row counts actually used for training/evaluation (single-chain, eligible
+CPI/PPI rows only; augmented copies are generated on the fly, not stored in
+the split CSVs above):
+
+| | original CPI | original PPI | augmented PPI (factor=6) | total used |
+|---|---|---|---|---|
+| train | 24,241 | 3,587 | 21,522 | 49,350 |
+| val | 3,019 | 448 | — (clean) | 3,467 |
+| test | 3,065 | 426 | — (clean) | 3,491 |
+
+Augmentation (ProtSMILES splice + ±5% pKd jitter, see Model section above)
+is applied ONLY to PPI-origin train rows -- CPI-origin rows are never
+augmented, and val/test always stay clean/unaugmented for evaluation.
+
 ## Results
 
 Single held-out split (`scripts/train_boost_t5protchem_raw_uniqueonly_quadsplice.py`,
