@@ -68,11 +68,7 @@ for the same pairs (`scripts/correlate_hoshino_t5protchem_raw_uniqueonly_quadspl
 |---|---|---|
 | vs. neutralization ratio (n=15) | 0.643 | 0.0098 |
 
-![Figure S24 reproduction](results/figureS24_reproduction.png)
-
-![Predicted pKd, same samples/order](results/predicted_pkd_barplot.png)
-
-![Reference pKd, same samples/order](results/reference_pkd_barplot.png)
+![Neutralization ratio vs. predicted pKd (normalized)](results/neutralization_vs_predicted_normalized.png)
 
 **Caveat**: a 10-seed robustness check (reshuffling the train/val/test
 partition 10 times and refitting) found this external correlation is **not
@@ -90,7 +86,7 @@ python scripts/train_boost_t5protchem_raw_uniqueonly_quadsplice.py
 python scripts/predict_hoshino_t5protchem_raw_uniqueonly_quadsplice.py
 python scripts/correlate_hoshino_t5protchem_raw_uniqueonly_quadsplice.py
 python scripts/plot_test_scatter.py                   # re-extracts test features and plots results/test_scatter.png
-python scripts/plot_hoshino_figures.py                 # plots the Figure S24 reproduction + correlation scatter
+python scripts/plot_hoshino_figures.py                 # plots the normalized neutralization-vs-predicted-pKd bar comparison
 ```
 
 Scripts reference absolute paths from the original project layout (T5ProtChem
