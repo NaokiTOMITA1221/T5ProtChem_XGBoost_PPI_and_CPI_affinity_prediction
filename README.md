@@ -35,16 +35,18 @@ this kind of data — but with one fix applied *before* splitting: rows whose
 possible chain orders) are deduplicated first, so no single underlying
 interaction can leak across train/val/test through that route.
 
-The resulting split CSVs (`molA`/`molB`/format/`pKd`/`data_origin` columns)
-are included directly under `data/`:
+The split CSVs under `data/` (`molA`/`molB`/format/`pKd`/`data_origin`
+columns) are already filtered down to exactly the rows actually used for
+training/evaluation (single-chain, eligible CPI/PPI rows with a real pKd --
+non-CPI/PPI-origin rows and multi-chain rows, which `make_pure_random_
+split_uniqueonly.py` itself leaves in place, have been removed here):
 
 - `data/split_pure_random_uniqueonly_train.csv`
 - `data/split_pure_random_uniqueonly_val.csv`
 - `data/split_pure_random_uniqueonly_test.csv`
 
-Row counts actually used for training/evaluation (single-chain, eligible
-CPI/PPI rows only; augmented copies are generated on the fly, not stored in
-the split CSVs above):
+Row counts (augmented copies are generated on the fly at train time, not
+stored in these CSVs):
 
 | | original CPI | original PPI | augmented PPI (factor=6) | total used |
 |---|---|---|---|---|
