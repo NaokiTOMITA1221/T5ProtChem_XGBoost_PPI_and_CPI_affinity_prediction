@@ -63,15 +63,26 @@ Predictions for an independent, out-of-domain polymer-peptide dataset
 in `results/predicted_pKa_KanM_T5ProtChem_raw_uniqueonly_quadsplice.csv`),
 correlated against an experimentally measured neutralization-ratio readout
 for the same pairs (`scripts/correlate_hoshino_t5protchem_raw_uniqueonly_quadsplice.py`).
-p-value is from a permutation test (99999 resamples) rather than the
-parametric t-distribution approximation, since n=15 is too small for the
-bivariate-normality assumption behind the parametric p-value to be reliable:
+p-value and 95% CI are from a BOOTSTRAP test (pairs resampled with
+replacement, 99999 resamples; p = 2*min(P(r_boot<=0), P(r_boot>=0))) rather
+than the parametric t-distribution approximation, since n=15 is too small
+for the bivariate-normality assumption behind the parametric p-value to be
+reliable:
 
-| | Pearson r | p (permutation) |
-|---|---|---|
-| vs. neutralization ratio (n=15) | 0.643 | 0.0158 |
+| | Pearson r | p (bootstrap) | 95% CI |
+|---|---|---|---|
+| vs. neutralization ratio (n=15) | 0.643 | 0.0837 | [-0.135, 0.898] |
+| reference pKd column vs. neutralization ratio (n=15) | 0.661 | 0.0102 | [0.207, 0.913] |
 
 ![Neutralization ratio vs. predicted pKd](results/neutralization_vs_predicted.png)
+
+**Under bootstrap resampling, this model's Hoshino correlation is NOT
+statistically significant** (p=0.084, 95% CI crosses zero) -- unlike the
+parametric (p=0.0098) and permutation-test (p=0.0158) estimates reported
+earlier, which both nominally cleared p<0.05. The reference pKd column's
+correlation (from another, external source) remains significant under all
+three methods. This n=15 result is evidently sensitive to the choice of
+significance-testing method, which is itself a sign of a fragile effect.
 
 **Caveat**: a 10-seed robustness check (reshuffling the train/val/test
 partition 10 times and refitting) found this external correlation is **not
