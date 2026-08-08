@@ -88,8 +88,6 @@ single-split Hoshino correlation found in this project:
 |---|---|---|
 | vs. neutralization ratio (n=15), CPI-only model | 0.683 | 0.0050 |
 
-![CPI-only model: predicted pKd vs. neutralization ratio](results/cpi_only_hoshino_scatter.png)
-
 A 10-seed robustness check for this CPI-only result is in progress; given
 the pattern above, treat this single-split number with the same caution
 until that's confirmed.
