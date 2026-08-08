@@ -1,8 +1,8 @@
 """
 Re-extracts test-set features (raw T5ProtChem encoder, same as
 train_boost_t5protchem_raw_uniqueonly_quadsplice.py) and plots predicted vs.
-true pKd for the test split, colored by CPI/PPI origin, with a y=x reference
-line and the Pearson r / RMSE annotated.
+true pKd for the test split as two SEPARATE panels, one for CPI rows and one
+for PPI rows, each with its own y=x reference line and Pearson r / RMSE.
 """
 import importlib.util
 import sys
@@ -96,19 +96,26 @@ print(f"overall: pearson r={r:.4f} (p={p:.2e}), rmse={rmse:.4f}")
 is_cpi = np.isin(origins, list(ud.CPI_ORIGINS))
 is_ppi = np.isin(origins, list(ud.PPI_ORIGINS))
 
-fig, ax = plt.subplots(figsize=(6, 6))
-ax.scatter(y_true[is_cpi], y_pred[is_cpi], s=10, alpha=0.4, label=f"CPI (n={is_cpi.sum()})", color="tab:blue")
-ax.scatter(y_true[is_ppi], y_pred[is_ppi], s=10, alpha=0.4, label=f"PPI (n={is_ppi.sum()})", color="tab:orange")
-
 lo = min(y_true.min(), y_pred.min())
 hi = max(y_true.max(), y_pred.max())
-ax.plot([lo, hi], [lo, hi], "k--", linewidth=1, label="y = x")
 
-ax.set_xlabel("True pKd")
-ax.set_ylabel("Predicted pKd")
-ax.set_title(f"Test set (n={len(y_true)}): Pearson r={r:.3f}, RMSE={rmse:.3f}")
-ax.legend(loc="upper left", fontsize=9)
-ax.set_aspect("equal", adjustable="box")
+fig, (ax_cpi, ax_ppi) = plt.subplots(1, 2, figsize=(12, 6))
+
+for ax, mask, name, color in [
+    (ax_cpi, is_cpi, "CPI", "tab:blue"),
+    (ax_ppi, is_ppi, "PPI", "tab:orange"),
+]:
+    yt, yp = y_true[mask], y_pred[mask]
+    r_sub, _ = pearsonr(yt, yp)
+    rmse_sub = mean_squared_error(yt, yp) ** 0.5
+    ax.scatter(yt, yp, s=10, alpha=0.4, color=color)
+    ax.plot([lo, hi], [lo, hi], "k--", linewidth=1, label="y = x")
+    ax.set_xlabel("True pKd")
+    ax.set_ylabel("Predicted pKd")
+    ax.set_title(f"{name} (n={mask.sum()}): Pearson r={r_sub:.3f}, RMSE={rmse_sub:.3f}")
+    ax.legend(loc="upper left", fontsize=9)
+    ax.set_aspect("equal", adjustable="box")
+
 fig.tight_layout()
 fig.savefig(OUTPUT_PNG, dpi=150)
 print(f"Saved scatter plot to {OUTPUT_PNG}")
