@@ -70,6 +70,7 @@ ref_values = [ref_by_label[label] for label in LABEL_ORDER]
 fig3, ax3 = plt.subplots(figsize=(9, 4.5))
 ax3.bar(LABEL_ORDER, ref_values, color=colors)
 ax3.set_ylabel("Reference pKd")
+ax3.set_ylim(5, max(ref_values) * 1.02)
 ax3.set_title("Reference pKd (external source), same samples/order as Figure S24 above")
 ax3.tick_params(axis="x", rotation=45)
 fig3.tight_layout()
