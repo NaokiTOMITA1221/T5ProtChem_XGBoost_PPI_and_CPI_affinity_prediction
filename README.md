@@ -70,7 +70,7 @@ for the same pairs (`scripts/correlate_hoshino_t5protchem_raw_uniqueonly_quadspl
 
 ![Figure S24 reproduction](results/figureS24_reproduction.png)
 
-![Predicted pKd vs. neutralization ratio](results/hoshino_correlation_scatter.png)
+![Distribution of predicted pKd](results/predicted_pkd_histogram.png)
 
 **Caveat**: a 10-seed robustness check (reshuffling the train/val/test
 partition 10 times and refitting) found this external correlation is **not
