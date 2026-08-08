@@ -58,8 +58,6 @@ for the same pairs (`scripts/correlate_hoshino_t5protchem_raw_uniqueonly_quadspl
 | | Pearson r | p |
 |---|---|---|
 | vs. neutralization ratio (n=15) | 0.643 | 0.0098 |
-| vs. reference pKd column (n=18) | 0.671 | 0.0023 |
-| vs. reference pKd column (n=15, matched subset) | 0.599 | 0.0182 |
 
 **Caveat**: a 10-seed robustness check (reshuffling the train/val/test
 partition 10 times and refitting) found this external correlation is **not
