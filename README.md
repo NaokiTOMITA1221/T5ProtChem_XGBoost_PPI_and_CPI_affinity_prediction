@@ -68,6 +68,10 @@ for the same pairs (`scripts/correlate_hoshino_t5protchem_raw_uniqueonly_quadspl
 |---|---|---|
 | vs. neutralization ratio (n=15) | 0.643 | 0.0098 |
 
+![Figure S24 reproduction](results/figureS24_reproduction.png)
+
+![Predicted pKd vs. neutralization ratio](results/hoshino_correlation_scatter.png)
+
 **Caveat**: a 10-seed robustness check (reshuffling the train/val/test
 partition 10 times and refitting) found this external correlation is **not
 stable** — across seeds the mean Pearson r was 0.18 (unbalanced) / -0.06
@@ -84,6 +88,7 @@ python scripts/train_boost_t5protchem_raw_uniqueonly_quadsplice.py
 python scripts/predict_hoshino_t5protchem_raw_uniqueonly_quadsplice.py
 python scripts/correlate_hoshino_t5protchem_raw_uniqueonly_quadsplice.py
 python scripts/plot_test_scatter.py                   # re-extracts test features and plots results/test_scatter.png
+python scripts/plot_hoshino_figures.py                 # plots the Figure S24 reproduction + correlation scatter
 ```
 
 Scripts reference absolute paths from the original project layout (T5ProtChem
