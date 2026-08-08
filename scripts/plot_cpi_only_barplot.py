@@ -28,6 +28,7 @@ pred_values = [pred_by_label[label] for label in LABEL_ORDER]
 fig, ax = plt.subplots(figsize=(9, 4.5))
 ax.bar(LABEL_ORDER, pred_values, color=colors)
 ax.set_ylabel("Predicted pKd (CPI-only model)")
+ax.set_ylim(3, max(pred_values) * 1.02)
 ax.set_title("CPI-only model: predicted pKd, same samples/order as Figure S24")
 ax.tick_params(axis="x", rotation=45)
 fig.tight_layout()
