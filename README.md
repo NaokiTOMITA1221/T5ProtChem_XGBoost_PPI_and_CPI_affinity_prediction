@@ -62,11 +62,14 @@ Predictions for an independent, out-of-domain polymer-peptide dataset
 (`scripts/predict_hoshino_t5protchem_raw_uniqueonly_quadsplice.py`, results
 in `results/predicted_pKa_KanM_T5ProtChem_raw_uniqueonly_quadsplice.csv`),
 correlated against an experimentally measured neutralization-ratio readout
-for the same pairs (`scripts/correlate_hoshino_t5protchem_raw_uniqueonly_quadsplice.py`):
+for the same pairs (`scripts/correlate_hoshino_t5protchem_raw_uniqueonly_quadsplice.py`).
+p-value is from a permutation test (99999 resamples) rather than the
+parametric t-distribution approximation, since n=15 is too small for the
+bivariate-normality assumption behind the parametric p-value to be reliable:
 
-| | Pearson r | p |
+| | Pearson r | p (permutation) |
 |---|---|---|
-| vs. neutralization ratio (n=15) | 0.643 | 0.0098 |
+| vs. neutralization ratio (n=15) | 0.643 | 0.0158 |
 
 ![Neutralization ratio vs. predicted pKd](results/neutralization_vs_predicted.png)
 
