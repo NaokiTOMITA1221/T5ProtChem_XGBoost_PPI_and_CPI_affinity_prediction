@@ -78,6 +78,22 @@ result above should be read as one favorable draw, not a validated,
 reproducible effect. In-domain (val/test) performance was consistently
 strong and stable across all seeds tested.
 
+#### CPI-only ablation
+
+Retraining the same raw T5ProtChem encoder + XGBoost, but on ONLY CPI-origin
+rows (dropping PPI rows entirely from training), gave the strongest
+single-split Hoshino correlation found in this project:
+
+| | Pearson r | p |
+|---|---|---|
+| vs. neutralization ratio (n=15), CPI-only model | 0.683 | 0.0050 |
+
+![CPI-only model: predicted pKd vs. neutralization ratio](results/cpi_only_hoshino_scatter.png)
+
+A 10-seed robustness check for this CPI-only result is in progress; given
+the pattern above, treat this single-split number with the same caution
+until that's confirmed.
+
 ## Reproducing
 
 ```bash
