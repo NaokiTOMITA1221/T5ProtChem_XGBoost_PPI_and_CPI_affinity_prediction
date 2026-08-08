@@ -68,7 +68,7 @@ for the same pairs (`scripts/correlate_hoshino_t5protchem_raw_uniqueonly_quadspl
 |---|---|---|
 | vs. neutralization ratio (n=15) | 0.643 | 0.0098 |
 
-![Neutralization ratio vs. predicted pKd (normalized)](results/neutralization_vs_predicted_normalized.png)
+![Neutralization ratio vs. predicted pKd](results/neutralization_vs_predicted.png)
 
 **Caveat**: a 10-seed robustness check (reshuffling the train/val/test
 partition 10 times and refitting) found this external correlation is **not
