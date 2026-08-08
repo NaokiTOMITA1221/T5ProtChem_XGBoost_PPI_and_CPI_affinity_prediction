@@ -47,6 +47,8 @@ see `results/metrics.json`):
 | val RMSE | 1.069 | 1.056 | 1.153 |
 | test RMSE | 1.070 | 1.045 | 1.233 |
 
+![Test set predicted vs. true pKd](results/test_scatter.png)
+
 ### External validation (out-of-domain)
 
 Predictions for an independent, out-of-domain polymer-peptide dataset
@@ -74,6 +76,7 @@ python scripts/make_pure_random_split_uniqueonly.py   # builds the split CSVs
 python scripts/train_boost_t5protchem_raw_uniqueonly_quadsplice.py
 python scripts/predict_hoshino_t5protchem_raw_uniqueonly_quadsplice.py
 python scripts/correlate_hoshino_t5protchem_raw_uniqueonly_quadsplice.py
+python scripts/plot_test_scatter.py                   # re-extracts test features and plots results/test_scatter.png
 ```
 
 Scripts reference absolute paths from the original project layout (T5ProtChem
