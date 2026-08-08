@@ -35,6 +35,13 @@ this kind of data — but with one fix applied *before* splitting: rows whose
 possible chain orders) are deduplicated first, so no single underlying
 interaction can leak across train/val/test through that route.
 
+The resulting split CSVs (`molA`/`molB`/format/`pKd`/`data_origin` columns)
+are included directly under `data/`:
+
+- `data/split_pure_random_uniqueonly_train.csv`
+- `data/split_pure_random_uniqueonly_val.csv`
+- `data/split_pure_random_uniqueonly_test.csv`
+
 ## Results
 
 Single held-out split (`scripts/train_boost_t5protchem_raw_uniqueonly_quadsplice.py`,
@@ -80,7 +87,8 @@ python scripts/plot_test_scatter.py                   # re-extracts test feature
 ```
 
 Scripts reference absolute paths from the original project layout (T5ProtChem
-checkpoints, the integrated CPI/PPI CSV pool, and an external polymer-affinity
-validation CSV) — update the path constants at the top of each script for
-your own environment. Raw data, the T5ProtChem pretrained checkpoint, and the
-external validation dataset are not included in this repo.
+checkpoints and an external polymer-affinity validation CSV) — update the
+path constants at the top of each script for your own environment. The split
+CSVs are included under `data/` (see above); the raw source datasets used to
+build them, the T5ProtChem pretrained checkpoint, and the external validation
+dataset are not included in this repo.
