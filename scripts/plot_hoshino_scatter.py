@@ -71,9 +71,12 @@ for _, row in sub.iterrows():
                textcoords="offset points", xytext=(5, 3), fontsize=8)
 ax.set_xlabel("Predicted pKd (this model)")
 ax.set_ylabel("Neutralization Ratio (%) -- Figure S24 bottom panel (0.1 mM)")
-ax.set_title(f"n=15: Pearson r={r:.3f} (p={p:.4f}), Spearman rho={rho:.3f} (p={p_rho:.4f})", fontsize=11)
+r2 = r ** 2
+ax.set_title(f"n=15: Pearson r={r:.3f} (p={p:.4f}), R²={r2:.3f}, Spearman rho={rho:.3f} (p={p_rho:.4f})",
+            fontsize=10.5)
 fig.subplots_adjust(top=0.90)
 fig.tight_layout()
 fig.savefig(OUT_PNG, dpi=150)
 print(f"Saved {OUT_PNG}")
-print(f"pearson r={r:.4f} (permutation p={p:.5f}), spearman rho={rho:.4f} (permutation p={p_rho:.5f})")
+print(f"pearson r={r:.4f} (permutation p={p:.5f}), r^2={r2:.4f}, "
+     f"spearman rho={rho:.4f} (permutation p={p_rho:.5f})")
