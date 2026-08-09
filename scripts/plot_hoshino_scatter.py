@@ -59,6 +59,13 @@ colors = ["tab:blue" if label.endswith("T0") else "tab:red" for label in sub["la
 
 fig, ax = plt.subplots(figsize=(7, 5.5))
 ax.scatter(sub[PRED_COL], sub["neutralization"], c=colors, s=60, edgecolor="black", linewidth=0.5)
+
+slope, intercept = np.polyfit(sub[PRED_COL], sub["neutralization"], 1)
+x_line = np.array([sub[PRED_COL].min(), sub[PRED_COL].max()])
+ax.plot(x_line, slope * x_line + intercept, linestyle=":", color="black", linewidth=1.5,
+       label=f"least-squares fit (y={slope:.2f}x+{intercept:.2f})")
+ax.legend(fontsize=8, loc="upper left")
+
 for _, row in sub.iterrows():
     ax.annotate(row["label"], (row[PRED_COL], row["neutralization"]),
                textcoords="offset points", xytext=(5, 3), fontsize=8)
