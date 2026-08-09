@@ -22,24 +22,38 @@ leakage-conscious "pure" random split.
 
 ## Data / split
 
-Source datasets: BindingDB, PDB-bind (protein-ligand and protein-protein
-subsets), PPB-Affinity, Human/C. elegans, Negatome (see the wider project's
-data curation pipeline — not included in this repo).
+Source datasets (referenced by `scripts/make_pure_random_split_uniqueonly.py`'s
+`DATASET_CSVS`, not included in this repo — see "Reproducing" below for the
+expected directory layout):
 
-The split (`scripts/make_pure_random_split_uniqueonly.py`) is a **plain
-row-level random split** (no protein-sequence-identity grouping, no CPI:PPI
-balancing) — deliberately closer to how a naive practitioner might split
-this kind of data — but with one fix applied *before* splitting: rows whose
-(moleculeA, moleculeB) pair matches another row's swapped
-(moleculeB, moleculeA) pair (both listing the same interaction in the two
-possible chain orders) are deduplicated first, so no single underlying
-interaction can leak across train/val/test through that route.
+| origin tag | source file |
+|---|---|
+| `BindingDB` | `BindingDB_BALM_bench/csv/bindingdb.csv` |
+| `Human_Celegans` | `Human_Celegans/csv/human_celegans.csv` |
+| `Negatome` | `Negatome/csv/negatome.csv` |
+| `PDB_bind_PL` | `PDB_bind/csv/pdb_bind_PL.csv` |
+| `PDB_bind_PP` | `PDB_bind/csv/pdb_bind_PP.csv` |
+| `PDB_bind_NL` | `PDB_bind/csv/pdb_bind_NL.csv` |
+| `PDB_bind_PN` | `PDB_bind/csv/pdb_bind_PN.csv` |
+| `PPB_affinity` | `PPB_affinity/csv/ppb_affinity.csv` |
 
-The split CSVs under `data/` (`molA`/`molB`/format/`pKd`/`data_origin`
-columns) are already filtered down to exactly the rows actually used for
-training/evaluation (single-chain, eligible CPI/PPI rows with a real pKd --
-non-CPI/PPI-origin rows and multi-chain rows, which `make_pure_random_
-split_uniqueonly.py` itself leaves in place, have been removed here):
+Pipeline from these source files down to the split CSVs checked into `data/`:
+
+1. **`scripts/make_pure_random_split_uniqueonly.py`** — reads all 8 source
+   CSVs, tags each row with its `data_origin`, drops `PPB_affinity` rows that
+   duplicate a `PDB_bind_PP` pair, then among CPI/PPI-origin rows with a real
+   pKd, deduplicates **swap-pairs** (a row whose (molA, molB) matches another
+   row's swapped (molB, molA) — both describing the same interaction in the
+   two possible chain orders) *before* splitting, averaging pKd across any
+   merged group. This is a **plain row-level random split** (no
+   protein-sequence-identity grouping, no CPI:PPI balancing, seed=42,
+   80/10/10) — deliberately closer to how a naive practitioner might split
+   this kind of data. Output: `split_pure_random_uniqueonly_{train,val,test}.csv`,
+   which still contains non-CPI/PPI-origin rows and multi-chain rows.
+2. **`scripts/trim_split_to_used_rows.py`** — trims those 3 files down to
+   exactly the rows actually used for training/evaluation (single-chain,
+   CPI/PPI-origin rows with a real pKd). This is the step that produces the
+   CSVs checked into `data/`:
 
 - `data/split_pure_random_uniqueonly_train.csv`
 - `data/split_pure_random_uniqueonly_val.csv`
@@ -56,7 +70,12 @@ stored in these CSVs):
 
 Augmentation (ProtSMILES splice + ±5% pKd jitter, see Model section above)
 is applied ONLY to PPI-origin train rows -- CPI-origin rows are never
-augmented, and val/test always stay clean/unaugmented for evaluation.
+augmented, and val/test always stay clean/unaugmented for evaluation. It is
+generated fresh at train time (not stored in these CSVs) but is fully
+deterministic given a fixed `AUG_SEED` (12345 in
+`train_boost_t5protchem_raw_uniqueonly_quadsplice.py`) -- re-running that
+script against the same `data/` CSVs reproduces the exact same augmented
+training set every time.
 
 ## Results
 
@@ -71,6 +90,35 @@ see `results/metrics.json`):
 | test RMSE | 1.070 | 1.045 | 1.233 |
 
 ![Test set predicted vs. true pKd](results/test_scatter.png)
+
+**CPI-only / PPI-only ablation** (same repo split and encoder, but trained
+on only CPI-origin or only PPI-origin train rows — PPI-only still uses the
+same oversampling/splice augmentation recipe; evaluated only on the
+matching origin subset of val/test, so the other domain's column is N/A):
+
+CPI-only model:
+
+| | overall | CPI | PPI |
+|---|---|---|---|
+| val Pearson r | 0.770 | 0.770 | — |
+| test Pearson r | 0.765 | 0.765 | — |
+| val RMSE | 1.054 | 1.054 | — |
+| test RMSE | 1.057 | 1.057 | — |
+
+PPI-only model:
+
+| | overall | CPI | PPI |
+|---|---|---|---|
+| val Pearson r | 0.812 | — | 0.812 |
+| test Pearson r | 0.828 | — | 0.828 |
+| val RMSE | 1.238 | — | 1.238 |
+| test RMSE | 1.233 | — | 1.233 |
+
+Compared to the combined (featured) model's own CPI/PPI columns above (val
+0.769/0.839, test 0.771/0.829), the single-domain models are close to —
+CPI-only slightly behind on CPI, PPI-only slightly ahead on PPI — so
+training on the combined CPI+PPI pool neither clearly helps nor hurts either
+domain's in-domain performance in this setup.
 
 ### External validation (out-of-domain)
 
@@ -116,7 +164,8 @@ strong and stable across all seeds tested.
 ## Reproducing
 
 ```bash
-python scripts/make_pure_random_split_uniqueonly.py   # builds the split CSVs
+python scripts/make_pure_random_split_uniqueonly.py   # source CSVs -> integrated_data_csv/split_pure_random_uniqueonly_{train,val,test}.csv
+python scripts/trim_split_to_used_rows.py               # trims those down to data/split_pure_random_uniqueonly_{train,val,test}.csv (what's checked into this repo)
 python scripts/train_boost_t5protchem_raw_uniqueonly_quadsplice.py
 python scripts/predict_hoshino_t5protchem_raw_uniqueonly_quadsplice.py
 python scripts/correlate_hoshino_t5protchem_raw_uniqueonly_quadsplice.py
@@ -128,7 +177,13 @@ python scripts/plot_hoshino_cpi_ppi_comparison.py       # plots results/hoshino_
 
 Scripts reference absolute paths from the original project layout (T5ProtChem
 checkpoints and an external polymer-affinity validation CSV) — update the
-path constants at the top of each script for your own environment. The split
-CSVs are included under `data/` (see above); the raw source datasets used to
-build them, the T5ProtChem pretrained checkpoint, and the external validation
+path constants at the top of each script for your own environment.
+`make_pure_random_split_uniqueonly.py` in particular expects the 8 source
+CSVs listed above to sit in sibling directories one level up from
+`integrated_data_csv/` (e.g. `.../BindingDB_BALM_bench/csv/bindingdb.csv`,
+`.../PDB_bind/csv/pdb_bind_PL.csv`, etc. — see its `DATASET_CSVS` dict). The
+split CSVs are included under `data/` (see above) so `trim_split_to_used_
+rows.py` and everything downstream can be re-run without needing the raw
+source datasets at all; only regenerating the split from scratch (step 1)
+needs them. The T5ProtChem pretrained checkpoint and the external validation
 dataset are not included in this repo.
