@@ -3,7 +3,7 @@ Scatter plot of this repo's model's predicted pKd vs. the Figure S24 bottom
 panel (ligand concentration 0.1 mM) neutralization ratio, for the 15
 Hoshino_polymer pairs with a matching Figure S24 value. Annotated with the
 permutation-test Pearson r and Spearman rho (see correlate_hoshino_
-t5protchem_raw_uniqueonly_quadsplice.py) -- blue markers for T0 (m=0)
+t5protchem_raw_uniqueonly_seed42_unbalanced.py) -- blue markers for T0 (m=0)
 samples, red for the rest, matching Figure S24's own color coding.
 """
 import matplotlib
@@ -20,8 +20,8 @@ NEUTRALIZATION = {
     "A4T0": 20.0, "A4T1": 21.3, "A4T2": 30.9, "A4T3": 62.3,
 }
 
-CSV = "/mnt/hdd/tomita/PPI_CPI_prediction/T5ProtChem_XGBoost_PPI_and_CPI_affinity_prediction/results/predicted_pKa_KanM_T5ProtChem_raw_uniqueonly_quadsplice.csv"
-PRED_COL = "predicted_pKd_T5ProtChem_raw_uniqueonly_quadsplice"
+CSV = "/mnt/hdd/tomita/PPI_CPI_prediction/T5ProtChem_XGBoost_PPI_and_CPI_affinity_prediction/results/predicted_pKa_KanM_T5ProtChem_raw_uniqueonly_seed42_unbalanced.csv"
+PRED_COL = "predicted_pKd_T5ProtChem_raw_uniqueonly_seed42_unbalanced"
 OUT_PNG = "/mnt/hdd/tomita/PPI_CPI_prediction/T5ProtChem_XGBoost_PPI_and_CPI_affinity_prediction/results/hoshino_correlation_scatter.png"
 N_RESAMPLES = 99999
 PERM_SEED = 42

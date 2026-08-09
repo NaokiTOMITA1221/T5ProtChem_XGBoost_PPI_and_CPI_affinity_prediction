@@ -1,26 +1,27 @@
 {
   "val": {
-    "overall/pearson": 0.7971194982528687,
-    "overall/spearman": 0.7587996683425932,
-    "overall/rmse": 1.0689038104645787,
-    "cpi/pearson": 0.7693226933479309,
-    "cpi/spearman": 0.7378262900567086,
-    "cpi/rmse": 1.0558164982305358,
-    "ppi/pearson": 0.8392480611801147,
-    "ppi/spearman": 0.8296582214779393,
-    "ppi/rmse": 1.1532304875782025
+    "overall/pearson": 0.7923769950866699,
+    "overall/spearman": 0.7588533736684967,
+    "overall/rmse": 1.0974498839873144,
+    "cpi/pearson": 0.7634550333023071,
+    "cpi/spearman": 0.7440797767832141,
+    "cpi/rmse": 1.0628244241316445,
+    "ppi/pearson": 0.8056631684303284,
+    "ppi/spearman": 0.7963337070040785,
+    "ppi/rmse": 1.3102883369588767
   },
   "test": {
-    "overall/pearson": 0.8103969097137451,
-    "overall/spearman": 0.7705236285732514,
-    "overall/rmse": 1.0697980883639906,
-    "cpi/pearson": 0.7713885307312012,
-    "cpi/spearman": 0.751139102413982,
-    "cpi/rmse": 1.0451115801437478,
-    "ppi/pearson": 0.8291098475456238,
-    "ppi/spearman": 0.7992532523874855,
-    "ppi/rmse": 1.2329267383631175
+    "overall/pearson": 0.7898848652839661,
+    "overall/spearman": 0.7588579605282926,
+    "overall/rmse": 1.1010502916261098,
+    "cpi/pearson": 0.7640866041183472,
+    "cpi/spearman": 0.7525860379579503,
+    "cpi/rmse": 1.0596613269162185,
+    "ppi/pearson": 0.7790918350219727,
+    "ppi/spearman": 0.7415686140262775,
+    "ppi/rmse": 1.3515116070112414
   },
-  "best_iteration": 493,
-  "oversample_factor": 6
+  "best_iteration": 477,
+  "seed": 42,
+  "unbalanced": true
 }
