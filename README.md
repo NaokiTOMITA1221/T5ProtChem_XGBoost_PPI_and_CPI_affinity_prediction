@@ -90,10 +90,10 @@ Permutation testing was chosen over a naive bootstrap percentile p-value,
 which doesn't properly enforce the null hypothesis and is unstable at this
 sample size (see conversation):
 
-| | r / rho | p (permutation) | R² |
-|---|---|---|---|
-| Pearson r vs. neutralization ratio (n=15) | 0.634 | 0.0042 | 0.402 |
-| Spearman rho vs. neutralization ratio (n=15) | 0.661 | 0.0085 | — |
+| | r / rho | p (permutation) |
+|---|---|---|
+| Pearson r vs. neutralization ratio (n=15) | 0.634 | 0.0042 |
+| Spearman rho vs. neutralization ratio (n=15) | 0.661 | 0.0085 |
 
 ![Neutralization ratio vs. predicted pKd](results/neutralization_vs_predicted.png)
 
