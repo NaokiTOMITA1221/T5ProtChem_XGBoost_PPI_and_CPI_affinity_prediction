@@ -7,7 +7,7 @@ Two side-by-side bar plot panels (same figure), sharing the same x-axis
      misc_information.pdf, page 25) via bar-color pixel detection + y-axis
      box-border calibration (see conversation).
   2. This repo's model's predicted pKd
-     (results/predicted_pKa_KanM_T5ProtChem_raw_uniqueonly_seed42_unbalanced.csv).
+     (results/predicted_pKa_KanM_T5ProtChem_raw_uniqueonly_quadsplice.csv).
 
 Each panel uses its own natural y-scale (percent vs. pKd units) -- blue bars
 for the T0 (m=0) samples, red for the rest, matching Figure S24's own color
@@ -28,8 +28,8 @@ LABEL_ORDER = ["A2T0", "A2T1", "A2T2", "A2T3", "A2T4", "A2T5",
               "A3T0", "A3T1", "A3T2", "A3T3", "A3T4",
               "A4T0", "A4T1", "A4T2", "A4T3"]
 
-PRED_CSV = "/mnt/hdd/tomita/PPI_CPI_prediction/T5ProtChem_XGBoost_PPI_and_CPI_affinity_prediction/results/predicted_pKa_KanM_T5ProtChem_raw_uniqueonly_seed42_unbalanced.csv"
-PRED_COL = "predicted_pKd_T5ProtChem_raw_uniqueonly_seed42_unbalanced"
+PRED_CSV = "/mnt/hdd/tomita/PPI_CPI_prediction/T5ProtChem_XGBoost_PPI_and_CPI_affinity_prediction/results/predicted_pKa_KanM_T5ProtChem_raw_uniqueonly_quadsplice.csv"
+PRED_COL = "predicted_pKd_T5ProtChem_raw_uniqueonly_quadsplice"
 OUT_PNG = "/mnt/hdd/tomita/PPI_CPI_prediction/T5ProtChem_XGBoost_PPI_and_CPI_affinity_prediction/results/neutralization_vs_predicted.png"
 
 colors = ["tab:blue" if label.endswith("T0") else "tab:red" for label in LABEL_ORDER]

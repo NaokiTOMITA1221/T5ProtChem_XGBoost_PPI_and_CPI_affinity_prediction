@@ -1,9 +1,8 @@
 """
 Re-extracts test-set features (raw T5ProtChem encoder, same as
-train_boost_t5protchem_raw_uniqueonly_seed42_unbalanced.py) and plots
-predicted vs. true pKd for the test split as two SEPARATE panels, one for
-CPI rows and one for PPI rows, each with its own y=x reference line and
-Pearson r / RMSE.
+train_boost_t5protchem_raw_uniqueonly_quadsplice.py) and plots predicted vs.
+true pKd for the test split as two SEPARATE panels, one for CPI rows and one
+for PPI rows, each with its own y=x reference line and Pearson r / RMSE.
 """
 import importlib.util
 import sys
@@ -30,10 +29,9 @@ _spec.loader.exec_module(um_cp)
 
 T5_CHECKPOINT_PATH = "/mnt/hdd/tomita/PPI_CPI_prediction/T5ProtChem/weights/Lightning_weights/Pretrained/T5ProtChem/model.pt"
 VOCAB_FILE = "/mnt/hdd/tomita/PPI_CPI_prediction/T5ProtChem/src/vocab/style2.json"
-REPO = "/mnt/hdd/tomita/PPI_CPI_prediction/T5ProtChem_XGBoost_PPI_and_CPI_affinity_prediction"
-TEST_CSV = f"{REPO}/data/split_pure_random_uniqueonly_seed42_test.csv"
-XGB_MODEL_PATH = f"{REPO}/results/xgb_model.json"
-OUTPUT_PNG = f"{REPO}/results/test_scatter.png"
+TEST_CSV = "/mnt/hdd/tomita/PPI_CPI_prediction/data/Affinity_data_culation/integrated_data_csv/split_pure_random_uniqueonly_test.csv"
+XGB_MODEL_PATH = "/mnt/hdd/tomita/PPI_CPI_prediction/T5VQBoost/runs/boost_baseline/version_t5protchem_raw_uniqueonly_quadsplice/xgb_model.json"
+OUTPUT_PNG = "/mnt/hdd/tomita/PPI_CPI_prediction/T5ProtChem_XGBoost_PPI_and_CPI_affinity_prediction/results/test_scatter.png"
 PROTEIN_MAX_LENGTH = 768
 DRUG_MAX_LENGTH = 768
 
