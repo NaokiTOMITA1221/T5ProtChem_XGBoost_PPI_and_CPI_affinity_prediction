@@ -93,32 +93,48 @@ see `results/metrics.json`):
 
 **CPI-only / PPI-only ablation** (same repo split and encoder, but trained
 on only CPI-origin or only PPI-origin train rows — PPI-only still uses the
-same oversampling/splice augmentation recipe; evaluated only on the
-matching origin subset of val/test, so the other domain's column is N/A):
+same oversampling/splice augmentation recipe). Both models are additionally
+applied to the FULL val/test set (both origins), not just their own
+training domain, to see how well a single-domain model transfers to the
+domain it never saw:
 
 CPI-only model:
 
 | | overall | CPI | PPI |
 |---|---|---|---|
-| val Pearson r | 0.770 | 0.770 | — |
-| test Pearson r | 0.765 | 0.765 | — |
-| val RMSE | 1.054 | 1.054 | — |
-| test RMSE | 1.057 | 1.057 | — |
+| val Pearson r | 0.651 | 0.770 | 0.113 |
+| test Pearson r | 0.649 | 0.765 | 0.265 |
+| val RMSE | 1.354 | 1.054 | 2.590 |
+| test RMSE | 1.405 | 1.057 | 2.854 |
+
+*The CPI column is this model's actual training domain (matches the number
+it was fit for). The overall/PPI columns are this CPI-only model run
+out-of-domain on PPI rows it never trained on — performance collapses on
+PPI (r drops to 0.11-0.26, RMSE roughly doubles or worse), so the
+"overall" number is dragged down mostly by that PPI failure, not by any
+weakness on CPI itself.*
 
 PPI-only model:
 
 | | overall | CPI | PPI |
 |---|---|---|---|
-| val Pearson r | 0.812 | — | 0.812 |
-| test Pearson r | 0.828 | — | 0.828 |
-| val RMSE | 1.238 | — | 1.238 |
-| test RMSE | 1.233 | — | 1.233 |
+| val Pearson r | 0.235 | 0.107 | 0.812 |
+| test Pearson r | 0.249 | 0.082 | 0.828 |
+| val RMSE | 2.343 | 2.465 | 1.238 |
+| test RMSE | 2.359 | 2.475 | 1.233 |
+
+*Same logic in reverse: the PPI column is this model's real training
+domain. Run out-of-domain on CPI, it's essentially uninformative
+(r ≈ 0.08-0.11, RMSE more than double the CPI-only/combined models) — a
+PPI-only model has learned almost nothing transferable to CPI prediction.*
 
 Compared to the combined (featured) model's own CPI/PPI columns above (val
-0.769/0.839, test 0.771/0.829), the single-domain models are close to —
-CPI-only slightly behind on CPI, PPI-only slightly ahead on PPI — so
-training on the combined CPI+PPI pool neither clearly helps nor hurts either
-domain's in-domain performance in this setup.
+0.769/0.839, test 0.771/0.829), each single-domain model matches the
+combined model closely **within its own domain**, but neither generalizes
+to the other domain at all. This suggests the combined model isn't
+benefiting from CPI/PPI knowledge transfer so much as it is implicitly
+routing each row to domain-appropriate behavior — the two tasks are learned
+largely independently even when trained together.
 
 ### External validation (out-of-domain)
 
