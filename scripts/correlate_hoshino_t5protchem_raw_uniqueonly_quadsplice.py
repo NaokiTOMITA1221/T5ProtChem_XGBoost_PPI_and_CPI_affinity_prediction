@@ -4,10 +4,13 @@ from scipy import stats
 from scipy.stats import spearmanr
 
 NEUTRALIZATION = {
-    "A2T0": 19.9, "A2T1": 38.8, "A2T2": 63.3, "A2T3": 56.6, "A2T4": 86.9, "A2T5": 51.7,
-    "A3T0": 24.8, "A3T1": 90.6, "A3T2": 51.5, "A3T3": 67.8, "A3T4": 58.7,
-    "A4T0": 84.3, "A4T1": 83.3, "A4T2": 77.5, "A4T3": 85.0,
+    "A2T0": 9.4, "A2T1": 3.6, "A2T2": 16.0, "A2T3": 26.4, "A2T4": 25.2, "A2T5": 31.8,
+    "A3T0": -4.7, "A3T1": 32.4, "A3T2": 19.4, "A3T3": 6.8, "A3T4": 21.1,
+    "A4T0": 20.0, "A4T1": 21.3, "A4T2": 30.9, "A4T3": 62.3,
 }
+# Values are from Figure S24's BOTTOM panel (ligand concentration 0.1 mM),
+# pixel-extracted from the source PDF (bar-color detection + y-axis
+# box-border calibration), not the top (1.0 mM) panel used previously.
 
 CSV = "/home/tomita/Hoshino_polymer/predicted_pKa_KanM_T5ProtChem_raw_uniqueonly_quadsplice.csv"
 PRED_COL = "predicted_pKd_T5ProtChem_raw_uniqueonly_quadsplice"
@@ -35,11 +38,29 @@ def pearsonr_perm(x, y):
     return res.statistic, res.pvalue
 
 
+def spearmanr_perm(x, y):
+    """Spearman rho with a permutation-test p-value, computed manually since
+    scipy.stats.spearmanr has no `method=PermutationMethod` option (unlike
+    pearsonr) -- same null (independence, via shuffling) and same rigor as
+    pearsonr_perm above, for consistency."""
+    rng = np.random.default_rng(PERM_SEED)
+    rho_obs = spearmanr(x, y).statistic
+    y_arr = np.asarray(y)
+    count = 0
+    for _ in range(N_RESAMPLES):
+        y_perm = rng.permutation(y_arr)
+        rho_perm = spearmanr(x, y_perm).statistic
+        if abs(rho_perm) >= abs(rho_obs):
+            count += 1
+    p = (count + 1) / (N_RESAMPLES + 1)
+    return rho_obs, p
+
+
 r_pred, p_pred = pearsonr_perm(sub[PRED_COL], sub["neutralization"])
-rho_pred, p_rho_pred = spearmanr(sub[PRED_COL], sub["neutralization"])
+rho_pred, p_rho_pred = spearmanr_perm(sub[PRED_COL], sub["neutralization"])
 r_ref, p_ref = pearsonr_perm(sub["pKd"], sub["neutralization"])
 
 print(f"predicted_pKd vs neutralization: pearson r={r_pred:.4f} (permutation p={p_pred:.5f}), "
-     f"spearman rho={rho_pred:.4f} (p={p_rho_pred:.4f}, asymptotic -- scipy has no permutation option for spearmanr)")
+     f"spearman rho={rho_pred:.4f} (permutation p={p_rho_pred:.5f})")
 print(f"reference pKd vs neutralization: pearson r={r_ref:.4f} (permutation p={p_ref:.5f})")
 print(sub[["label", "pKd", PRED_COL, "neutralization"]].to_string(index=False))

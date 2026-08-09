@@ -79,17 +79,21 @@ Predictions for an independent, out-of-domain polymer-peptide dataset
 in `results/predicted_pKa_KanM_T5ProtChem_raw_uniqueonly_quadsplice.csv`),
 correlated against an experimentally measured neutralization-ratio readout
 for the same pairs (`scripts/correlate_hoshino_t5protchem_raw_uniqueonly_quadsplice.py`).
-p-value is from a PERMUTATION test (99999 resamples, shuffling one variable
-against the other to build the null distribution of r under independence)
-rather than the parametric t-distribution approximation, since n=15 is too
-small for the bivariate-normality assumption behind the parametric p-value
-to be reliable. Permutation testing was chosen over a naive bootstrap
-percentile p-value, which doesn't properly enforce the null hypothesis and
-is unstable at this sample size (see conversation):
+The neutralization-ratio values are from the **bottom panel (ligand
+concentration 0.1 mM)** of the source paper's Figure S24, pixel-extracted
+from the supplementary PDF (bar-color pixel detection + y-axis box-border
+calibration). p-values are from PERMUTATION tests (99999 resamples,
+shuffling one variable against the other to build the null distribution
+under independence) rather than the parametric/asymptotic approximations,
+since n=15 is too small for the assumptions behind those to be reliable.
+Permutation testing was chosen over a naive bootstrap percentile p-value,
+which doesn't properly enforce the null hypothesis and is unstable at this
+sample size (see conversation):
 
-| | Pearson r | p (permutation) |
+| | r / rho | p (permutation) |
 |---|---|---|
-| vs. neutralization ratio (n=15) | 0.643 | 0.0158 |
+| Pearson r vs. neutralization ratio (n=15) | 0.634 | 0.0042 |
+| Spearman rho vs. neutralization ratio (n=15) | 0.661 | 0.0085 |
 
 ![Neutralization ratio vs. predicted pKd](results/neutralization_vs_predicted.png)
 

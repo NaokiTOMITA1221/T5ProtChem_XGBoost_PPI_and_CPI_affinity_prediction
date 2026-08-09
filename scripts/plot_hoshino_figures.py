@@ -1,8 +1,11 @@
 """
 Two side-by-side bar plot panels (same figure), sharing the same x-axis
 (A{n}T{m} sample labels, in the same order) so they can be visually compared:
-  1. The Figure S24 hemolysis neutralization ratio (pixel-extracted from the
-     source PDF earlier in this project -- see conversation).
+  1. The Figure S24 hemolysis neutralization ratio -- BOTTOM panel (ligand
+     concentration 0.1 mM, the lowest of the figure's three concentration
+     panels), pixel-extracted from the source PDF (anie201910558-sup-0001-
+     misc_information.pdf, page 25) via bar-color pixel detection + y-axis
+     box-border calibration (see conversation).
   2. This repo's model's predicted pKd
      (results/predicted_pKa_KanM_T5ProtChem_raw_uniqueonly_quadsplice.csv).
 
@@ -17,9 +20,9 @@ import matplotlib.pyplot as plt
 import pandas as pd
 
 NEUTRALIZATION = {
-    "A2T0": 19.9, "A2T1": 38.8, "A2T2": 63.3, "A2T3": 56.6, "A2T4": 86.9, "A2T5": 51.7,
-    "A3T0": 24.8, "A3T1": 90.6, "A3T2": 51.5, "A3T3": 67.8, "A3T4": 58.7,
-    "A4T0": 84.3, "A4T1": 83.3, "A4T2": 77.5, "A4T3": 85.0,
+    "A2T0": 9.4, "A2T1": 3.6, "A2T2": 16.0, "A2T3": 26.4, "A2T4": 25.2, "A2T5": 31.8,
+    "A3T0": -4.7, "A3T1": 32.4, "A3T2": 19.4, "A3T3": 6.8, "A3T4": 21.1,
+    "A4T0": 20.0, "A4T1": 21.3, "A4T2": 30.9, "A4T3": 62.3,
 }
 LABEL_ORDER = ["A2T0", "A2T1", "A2T2", "A2T3", "A2T4", "A2T5",
               "A3T0", "A3T1", "A3T2", "A3T3", "A3T4",
@@ -42,8 +45,9 @@ fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(16, 4.5))
 
 ax1.bar(LABEL_ORDER, neut_values, color=colors)
 ax1.set_ylabel("Neutralization Ratio (%)")
-ax1.set_ylim(0, 100)
-ax1.set_title("Figure S24 (top histogram) reproduction")
+ax1.set_ylim(-10, 100)
+ax1.axhline(0, color="black", linewidth=0.8)
+ax1.set_title("Figure S24 (bottom histogram, 0.1 mM) reproduction")
 ax1.tick_params(axis="x", rotation=45)
 
 ax2.bar(LABEL_ORDER, pred_values, color=colors)
