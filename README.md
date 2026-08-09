@@ -99,6 +99,12 @@ sample size (see conversation):
 
 ![Predicted pKd vs. neutralization ratio scatter](results/hoshino_correlation_scatter.png)
 
+**CPI-only vs. PPI-only ablation**: models trained on the same repo split
+using only CPI-origin or only PPI-origin train rows (same encoder/
+augmentation recipe), for comparison against the combined (featured) model:
+
+![CPI-only vs. PPI-only vs. combined Hoshino correlation](results/hoshino_cpi_ppi_comparison_bar.png)
+
 **Caveat**: a 10-seed robustness check (reshuffling the train/val/test
 partition 10 times and refitting) found this external correlation is **not
 stable** — across seeds the mean Pearson r was 0.18 (unbalanced) / -0.06
@@ -117,6 +123,7 @@ python scripts/correlate_hoshino_t5protchem_raw_uniqueonly_quadsplice.py
 python scripts/plot_test_scatter.py                   # re-extracts test features and plots results/test_scatter.png
 python scripts/plot_hoshino_figures.py                 # plots results/neutralization_vs_predicted.png (Figure S24 vs. predicted pKd, side by side)
 python scripts/plot_hoshino_scatter.py                 # plots results/hoshino_correlation_scatter.png (predicted pKd vs. neutralization ratio scatter)
+python scripts/plot_hoshino_cpi_ppi_comparison.py       # plots results/hoshino_cpi_ppi_comparison_bar.png (CPI-only vs. PPI-only vs. combined, requires results/hoshino_predictions_cpi_ppi_only.csv)
 ```
 
 Scripts reference absolute paths from the original project layout (T5ProtChem
