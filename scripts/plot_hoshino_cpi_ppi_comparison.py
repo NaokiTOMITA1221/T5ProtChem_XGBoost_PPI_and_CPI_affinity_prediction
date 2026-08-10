@@ -1,11 +1,14 @@
 """
-Bar plot comparing the Hoshino_polymer external-validation Pearson
-correlation (vs. Figure S24 bottom panel, 0.1 mM neutralization ratio,
-n=15) across three models trained on the same split_pure_random_uniqueonly
-data (same encoder/architecture): CPI-only, PPI-only, and this repo's
-featured CPI+PPI combined (balanced) model. All three use permutation-test
-Pearson p-values (99999 resamples) for consistency with the rest of this
-repo's methodology.
+Bar plot comparing the Hoshino_polymer external-validation correlation
+(vs. Figure S24 bottom panel, 0.1 mM neutralization ratio, n=15) across
+three models trained on the same split_pure_random_uniqueonly data (same
+encoder/architecture): CPI-only, PPI-only, and this repo's featured
+CPI+PPI combined (balanced) model. Both Pearson r and Spearman rho are
+shown, grouped side by side per metric, with all three models' bars
+adjacent within each group. Combined is solid black; CPI-only/PPI-only use
+hatch patterns (dots / diagonal lines) instead of color so the figure reads
+in grayscale too. All p-values are from permutation tests (99999
+resamples) for consistency with the rest of this repo's methodology.
 """
 import os
 
@@ -15,6 +18,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 from scipy import stats
+from scipy.stats import spearmanr
 
 NEUTRALIZATION = {
     "A2T0": 9.4, "A2T1": 3.6, "A2T2": 16.0, "A2T3": 26.4, "A2T4": 25.2, "A2T5": 31.8,
@@ -36,41 +40,65 @@ def pearsonr_perm(x, y):
     return res.statistic, res.pvalue
 
 
+def spearmanr_perm(x, y):
+    rng = np.random.default_rng(PERM_SEED)
+    rho_obs = spearmanr(x, y).statistic
+    y_arr = np.asarray(y)
+    count = 0
+    for _ in range(N_RESAMPLES):
+        y_perm = rng.permutation(y_arr)
+        rho_perm = spearmanr(x, y_perm).statistic
+        if abs(rho_perm) >= abs(rho_obs):
+            count += 1
+    p = (count + 1) / (N_RESAMPLES + 1)
+    return rho_obs, p
+
+
 def load_pred(csv_path, pred_col="predicted_pKd"):
     df = pd.read_csv(csv_path)
     df["label"] = "A" + df["n"].astype(str) + "T" + df["m"].astype(str)
     df["neutralization"] = df["label"].map(NEUTRALIZATION)
     sub = df.dropna(subset=["neutralization"])
-    return pearsonr_perm(sub[pred_col], sub["neutralization"])
+    r, p_r = pearsonr_perm(sub[pred_col], sub["neutralization"])
+    rho, p_rho = spearmanr_perm(sub[pred_col], sub["neutralization"])
+    return r, p_r, rho, p_rho
 
 
-r_cpi, p_cpi = load_pred(CPI_ONLY_CSV)
-r_ppi, p_ppi = load_pred(PPI_ONLY_CSV)
-r_combined, p_combined = load_pred(COMBINED_CSV)
+models = ["CPI-only", "PPI-only", "Combined\n(featured model)"]
+csvs = [CPI_ONLY_CSV, PPI_ONLY_CSV, COMBINED_CSV]
+hatches = [".", "/", None]  # dots / diagonal lines / solid
+facecolors = ["white", "white", "black"]
 
-print(f"CPI-only:  r={r_cpi:.4f} (permutation p={p_cpi:.5f})")
-print(f"PPI-only:  r={r_ppi:.4f} (permutation p={p_ppi:.5f})")
-print(f"Combined (featured): r={r_combined:.4f} (permutation p={p_combined:.5f})")
+results = [load_pred(csv) for csv in csvs]
+for name, (r, p_r, rho, p_rho) in zip(models, results):
+    print(f"{name.replace(chr(10), ' ')}: pearson r={r:.4f} (p={p_r:.5f}), spearman rho={rho:.4f} (p={p_rho:.5f})")
 
-labels = ["CPI-only", "PPI-only", "Combined\n(featured model)"]
-rs = [r_cpi, r_ppi, r_combined]
-ps = [p_cpi, p_ppi, p_combined]
-colors = ["tab:orange", "tab:green", "tab:red"]
+metrics = ["Pearson r", "Spearman rho"]
+group_centers = np.arange(len(metrics))
+n_models = len(models)
+bar_width = 0.8 / n_models
 
-fig, ax = plt.subplots(figsize=(6.5, 5.5))
-bars = ax.bar(labels, rs, color=colors, edgecolor="black", linewidth=0.7)
+fig, ax = plt.subplots(figsize=(8, 6))
+for i, (name, hatch, facecolor) in enumerate(zip(models, hatches, facecolors)):
+    r, p_r, rho, p_rho = results[i]
+    values = [r, rho]
+    pvals = [p_r, p_rho]
+    offsets = group_centers + (i - (n_models - 1) / 2) * bar_width
+    bars = ax.bar(offsets, values, width=bar_width, facecolor=facecolor, edgecolor="black",
+                 linewidth=0.9, hatch=hatch, label=name.replace("\n", " "))
+    for x, v, p in zip(offsets, values, pvals):
+        sig = "*" if p < 0.05 else ""
+        y = v + (0.03 if v >= 0 else -0.03)
+        va = "bottom" if v >= 0 else "top"
+        ax.annotate(f"{v:.3f}{sig}", (x, y), ha="center", va=va, fontsize=8)
+
 ax.axhline(0, color="black", linewidth=0.8)
-ax.set_ylabel("Pearson r vs. neutralization ratio\n(Figure S24 bottom panel, 0.1 mM, n=15)")
+ax.set_xticks(group_centers)
+ax.set_xticklabels(metrics)
+ax.set_ylabel("Correlation vs. neutralization ratio\n(Figure S24 bottom panel, 0.1 mM, n=15)")
 ax.set_title("Hoshino_polymer correlation: CPI-only vs. PPI-only vs. combined")
-
-for bar, r, p in zip(bars, rs, ps):
-    sig = "*" if p < 0.05 else ""
-    y = r + (0.03 if r >= 0 else -0.03)
-    va = "bottom" if r >= 0 else "top"
-    ax.annotate(f"r={r:.3f}{sig}\n(p={p:.3f})", (bar.get_x() + bar.get_width() / 2, y),
-               ha="center", va=va, fontsize=9)
-
 ax.set_ylim(-0.5, 0.9)
+ax.legend(loc="upper left", fontsize=9)
 fig.tight_layout()
 fig.savefig(OUT_PNG, dpi=150)
 print(f"Saved {OUT_PNG}")
