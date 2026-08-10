@@ -145,6 +145,13 @@ assumptions behind those to be reliable:
 
 ![Predicted pKd vs. neutralization ratio scatter (0.1 mM panel)](results/hoshino_correlation_scatter.png)
 
+![Neutralization ratio vs. predicted pKd, side by side (0.1 mM panel)](results/neutralization_vs_predicted.png)
+
+**CPI-only vs. PPI-only ablation**: same three models as the Results
+section above, compared on this external validation set (0.1 mM panel):
+
+![CPI-only vs. PPI-only vs. combined Hoshino correlation](results/hoshino_cpi_ppi_comparison_bar.png)
+
 **Caveat**: earlier robustness checks on prior model variants in this
 project (reshuffling the train/val/test partition and refitting) have
 repeatedly found this kind of small-n (n=15) external correlation to be
@@ -169,6 +176,8 @@ python scripts/train_cpi_only.py                          # ablation -> outputs/
 python scripts/train_ppi_only.py                          # ablation -> outputs/mlp_ppi_only.pt
 python scripts/predict_hoshino.py                          # results/predicted_pKa_KanM_balanced.csv, results/hoshino_correlation.json
 python scripts/plot_hoshino_scatter.py                     # results/hoshino_correlation_scatter.png
+python scripts/plot_hoshino_figures.py                      # results/neutralization_vs_predicted.png (needs results/predicted_pKa_KanM_balanced.csv)
+python scripts/plot_hoshino_cpi_ppi_comparison.py            # results/hoshino_cpi_ppi_comparison_bar.png (needs predict_hoshino.py re-pointed at each of the 3 checkpoints -- see script header)
 ```
 
 Scripts reference absolute paths from the original project layout (T5ProtChem
