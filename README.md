@@ -82,6 +82,8 @@ Single held-out split (`scripts/train_balanced.py`, see `results/metrics.json`):
 | val RMSE | 1.330 | 1.266 | 1.700 |
 | test RMSE | 1.302 | 1.238 | 1.693 |
 
+![Test set predicted vs. true pKd, CPI and PPI separately](results/test_scatter.png)
+
 **CPI-only / PPI-only ablation** (same split, same architecture/augmentation
 recipe, but trained on only CPI-origin or only PPI-origin train rows — see
 `scripts/train_cpi_only.py` / `train_ppi_only.py`, `results/ablation_metrics.json`).
@@ -172,6 +174,7 @@ python scripts/extract_contact_masks.py                   # contact-token masks 
 python scripts/extract_ppi_contact_splice_augmented.py    # PPI rows w/ contact data -> outputs/features_ppi_contact_splice_augmented_cache.pt
 python scripts/extract_ppi_random_splice_augmented_nocontact.py  # PPI rows w/o contact data -> outputs/features_ppi_random_splice_augmented_nocontact_cache.pt
 python scripts/train_balanced.py                          # featured model -> outputs/mlp_balanced.pt, results/metrics.json
+python scripts/plot_test_scatter.py                        # results/test_scatter.png (CPI/PPI test scatter, FULL-SUM only)
 python scripts/train_cpi_only.py                          # ablation -> outputs/mlp_cpi_only.pt
 python scripts/train_ppi_only.py                          # ablation -> outputs/mlp_ppi_only.pt
 python scripts/predict_hoshino.py                          # results/predicted_pKa_KanM_balanced.csv, results/hoshino_correlation.json
