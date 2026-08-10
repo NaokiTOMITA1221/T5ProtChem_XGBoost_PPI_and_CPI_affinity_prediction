@@ -42,17 +42,24 @@ df["label"] = "A" + df["n"].astype(str) + "T" + df["m"].astype(str)
 pred_by_label = df.set_index("label")[PRED_COL]
 pred_values = [pred_by_label[label] for label in LABEL_ORDER]
 
+def padded_range(values, frac=0.05):
+    lo, hi = min(values), max(values)
+    pad = (hi - lo) * frac
+    return lo - pad, hi + pad
+
+
 fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(16, 4.5))
 
 ax1.bar(LABEL_ORDER, neut_values, color=colors)
 ax1.set_ylabel("Neutralization Ratio (%)")
-ax1.set_ylim(-10, 100)
+ax1.set_ylim(*padded_range(neut_values))
 ax1.axhline(0, color="black", linewidth=0.8)
 ax1.set_title("Figure S24 (bottom histogram, 0.1 mM) reproduction")
 ax1.tick_params(axis="x", rotation=45)
 
 ax2.bar(LABEL_ORDER, pred_values, color=colors)
 ax2.set_ylabel("Predicted pKd (featured model)")
+ax2.set_ylim(*padded_range(pred_values))
 ax2.set_title("Predicted pKd, same samples/order")
 ax2.tick_params(axis="x", rotation=45)
 
