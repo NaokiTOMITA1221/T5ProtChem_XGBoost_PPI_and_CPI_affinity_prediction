@@ -1,5 +1,5 @@
 """
-Applies the featured model (train_balanced.py's checkpoint, outputs/
+Applies the combined model (train_balanced.py's checkpoint, outputs/
 mlp_balanced.pt) to the external, out-of-domain Hoshino_polymer
 polymer-peptide dataset (INPUT_CSV, not included in this repo -- see
 README), using the FULL-SUM prediction (Transformer-residual + per-token-MLP

@@ -1,5 +1,5 @@
 """
-Scatter plot of the featured model's predicted pKd vs. the Figure S24
+Scatter plot of the combined model's predicted pKd vs. the Figure S24
 bottom panel (ligand concentration 0.1 mM) neutralization ratio, for the 15
 Hoshino_polymer pairs with a matching Figure S24 value. Annotated with the
 permutation-test Pearson r and Spearman rho (see predict_hoshino.py) --
@@ -72,7 +72,7 @@ ax.legend(fontsize=8, loc="upper left")
 for _, row in sub.iterrows():
     ax.annotate(row["label"], (row[PRED_COL], row["neutralization"]),
                textcoords="offset points", xytext=(5, 3), fontsize=8)
-ax.set_xlabel("Predicted pKd (featured model)")
+ax.set_xlabel("Predicted pKd (combined model)")
 ax.set_ylabel("Neutralization Ratio (%) -- Figure S24 bottom panel (0.1 mM)")
 ax.set_title(f"n=15: Pearson r={r:.3f} (p={p:.4f}), Spearman rho={rho:.3f} (p={p_rho:.4f})", fontsize=11)
 fig.subplots_adjust(top=0.90)

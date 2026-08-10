@@ -1,5 +1,5 @@
 """
-Predicted vs. true pKd for the combined (featured, balanced) model's test
+Predicted vs. true pKd for the combined model's test
 split, as two SEPARATE panels -- one for CPI rows, one for PPI rows -- each
 with its own y=x reference line and Pearson r / RMSE. Uses only the
 FULL-SUM prediction (no contact restriction). Reuses the frozen-encoder
@@ -88,12 +88,12 @@ for ax, mask, name, color in [
     ax.scatter(yt, yp, s=10, alpha=0.4, color=color)
     ax.plot([lo, hi], [lo, hi], "k--", linewidth=1, label="y = x")
     ax.set_xlabel("True pKd")
-    ax.set_ylabel("Predicted pKd (FULL-SUM)")
+    ax.set_ylabel("Predicted pKd")
     ax.set_title(f"{name} (n={mask.sum()}): Pearson r={r_sub:.3f}, RMSE={rmse_sub:.3f}")
     ax.legend(loc="upper left", fontsize=9)
     ax.set_aspect("equal", adjustable="box")
 
-fig.suptitle("Combined (featured) model -- test set, FULL-SUM prediction")
+fig.suptitle("Combined model -- test set")
 fig.tight_layout()
 fig.savefig(OUT_PNG, dpi=150)
 print(f"Saved scatter plot to {OUT_PNG}")

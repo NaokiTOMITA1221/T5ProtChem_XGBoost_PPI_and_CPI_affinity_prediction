@@ -4,7 +4,7 @@ Two side-by-side bar plot panels (same figure), sharing the same x-axis
   1. The Figure S24 hemolysis neutralization ratio -- BOTTOM panel (ligand
      concentration 0.1 mM), pixel-extracted from the source PDF
      (bar-color pixel detection + y-axis box-border calibration).
-  2. This repo's featured model's predicted pKd (results/predicted_pKa_
+  2. This repo's combined model's predicted pKd (results/predicted_pKa_
      KanM_balanced.csv).
 
 Each panel uses its own natural y-scale (percent vs. pKd units) -- blue
@@ -58,7 +58,7 @@ ax1.set_title("Figure S24 (bottom histogram, 0.1 mM) reproduction")
 ax1.tick_params(axis="x", rotation=45)
 
 ax2.bar(LABEL_ORDER, pred_values, color=colors)
-ax2.set_ylabel("Predicted pKd (featured model)")
+ax2.set_ylabel("Predicted pKd (combined model)")
 ax2.set_ylim(*padded_range(pred_values))
 ax2.set_title("Predicted pKd, same samples/order")
 ax2.tick_params(axis="x", rotation=45)

@@ -119,7 +119,7 @@ PPI-only model:
 domain. Run out-of-domain on CPI, it's weak (r ≈ 0.12-0.15) though not
 quite as degenerate as CPI-only's transfer to PPI.*
 
-Compared to the combined (featured) model's own CPI/PPI columns above (val
+Compared to the combined model's own CPI/PPI columns above (val
 0.648/0.651, test 0.663/0.715), each single-domain model roughly matches
 the combined model **within its own domain**, but transfers only weakly to
 the other domain — consistent with the earlier XGBoost-based version of
@@ -173,7 +173,7 @@ python scripts/extract_base_features.py                  # frozen-encoder featur
 python scripts/extract_contact_masks.py                   # contact-token masks aligned to that cache -> outputs/contact_masks_for_full_tokens.pt
 python scripts/extract_ppi_contact_splice_augmented.py    # PPI rows w/ contact data -> outputs/features_ppi_contact_splice_augmented_cache.pt
 python scripts/extract_ppi_random_splice_augmented_nocontact.py  # PPI rows w/o contact data -> outputs/features_ppi_random_splice_augmented_nocontact_cache.pt
-python scripts/train_balanced.py                          # featured model -> outputs/mlp_balanced.pt, results/metrics.json
+python scripts/train_balanced.py                          # combined model -> outputs/mlp_balanced.pt, results/metrics.json
 python scripts/plot_test_scatter.py                        # results/test_scatter.png (CPI/PPI test scatter, FULL-SUM only)
 python scripts/train_cpi_only.py                          # ablation -> outputs/mlp_cpi_only.pt
 python scripts/train_ppi_only.py                          # ablation -> outputs/mlp_ppi_only.pt

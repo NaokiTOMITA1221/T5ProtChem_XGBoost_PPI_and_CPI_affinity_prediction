@@ -2,8 +2,8 @@
 Bar plot comparing the Hoshino_polymer external-validation correlation
 (vs. Figure S24 bottom panel, 0.1 mM neutralization ratio, n=15) across
 three models trained on the same split_pure_random_uniqueonly data (same
-encoder/architecture): CPI-only, PPI-only, and this repo's featured
-CPI+PPI combined (balanced) model. Both Pearson r and Spearman rho are
+encoder/architecture): CPI-only, PPI-only, and this repo's combined
+CPI+PPI (balanced) model. Both Pearson r and Spearman rho are
 shown, grouped side by side per metric, with all three models' bars
 adjacent within each group. Combined is solid black; CPI-only/PPI-only use
 hatch patterns (dots / diagonal lines) instead of color so the figure reads
@@ -64,7 +64,7 @@ def load_pred(csv_path, pred_col="predicted_pKd"):
     return r, p_r, rho, p_rho
 
 
-models = ["CPI-only", "PPI-only", "Combined\n(featured model)"]
+models = ["CPI-only", "PPI-only", "Combined"]
 csvs = [CPI_ONLY_CSV, PPI_ONLY_CSV, COMBINED_CSV]
 hatches = [".", "/", None]  # dots / diagonal lines / solid
 facecolors = ["white", "white", "black"]

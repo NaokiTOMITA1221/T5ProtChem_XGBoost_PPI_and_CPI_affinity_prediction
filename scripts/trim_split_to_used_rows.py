@@ -2,7 +2,7 @@
 Trims the FULL split_pure_random_uniqueonly_{train,val,test}.csv (the direct
 output of make_pure_random_split_uniqueonly.py, which still contains
 non-CPI/PPI-origin rows and multi-chain rows) down to exactly the rows
-actually used for training/evaluation by this repo's featured model:
+actually used for training/evaluation by this repo's combined model:
 single-chain, CPI/PPI-origin rows with a real (non-null) pKd.
 
 This is the exact eligibility filter used throughout this repo's training/
